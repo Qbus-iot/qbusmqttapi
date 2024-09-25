@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "qbusmqttapi"
-version = "0.2.0"
+version = "0.2.1"
 description = "MQTT API for Qbus Home Automation"
 readme = "README.md"
 authors = [{ name = "Koen Schockaert", email = "iot@qbus.be" }]
