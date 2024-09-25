@@ -19,7 +19,6 @@ setuptools.setup(
         "Development Status :: 3 - Alpha",
         "Environment :: Console",
         "Intended Audience :: Developers",
-        "Intended Audience :: Home Assistant",
         "License :: OSI Approved ::  MIT License",
         "Programming Language :: Python :: 3.10",
     ],
