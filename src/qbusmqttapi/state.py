@@ -2,6 +2,7 @@
 
 from enum import StrEnum
 from typing import Any
+
 from .const import (
     KEY_OUTPUT_ACTION,
     KEY_OUTPUT_ID,
@@ -14,6 +15,10 @@ KEY_CONTROLLER_CONNECTABLE = "connectable"
 KEY_CONTROLLER_CONNECTED = "connected"
 KEY_CONTROLLER_ID = "id"
 KEY_CONTROLLER_STATE_PROPERTIES = "properties"
+
+KEY_GATEWAY_ID = "id"
+KEY_GATEWAY_ONLINE = "online"
+KEY_GATEWAY_REASON = "reason"
 
 
 class StateType(StrEnum):
@@ -28,6 +33,16 @@ class StateAction(StrEnum):
 
     ACTIVATE = "activate"
     ACTIVE = "active"
+
+
+class QbusMqttGatewayState:
+    """MQTT representation a Qbus gateway state."""
+
+    def __init__(self, data: dict) -> None:
+        """Initialize based on a json loaded dictionary."""
+        self.id: str | None = data.get(KEY_GATEWAY_ID)
+        self.online: bool | None = data.get(KEY_GATEWAY_ONLINE)
+        self.reason: str | None = data.get(KEY_GATEWAY_REASON)
 
 
 class QbusMqttControllerStateProperties:
@@ -48,9 +63,7 @@ class QbusMqttControllerState:
 
         properties = data.get(KEY_CONTROLLER_STATE_PROPERTIES)
         self.properties: QbusMqttControllerStateProperties | None = (
-            QbusMqttControllerStateProperties(properties)
-            if properties is not None
-            else None
+            QbusMqttControllerStateProperties(properties) if properties is not None else None
         )
 
 

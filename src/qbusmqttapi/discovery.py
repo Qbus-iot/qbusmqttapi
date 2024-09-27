@@ -11,7 +11,6 @@ from .const import (
     KEY_OUTPUT_TYPE,
 )
 
-
 KEY_DEVICES = "devices"
 
 KEY_DEVICE_FUNCTIONBLOCKS = "functionBlocks"
@@ -117,9 +116,7 @@ class QbusMqttDevice:
         outputs: list[QbusMqttOutput] = []
 
         if self._data.get(KEY_DEVICE_FUNCTIONBLOCKS):
-            outputs = [
-                QbusMqttOutput(x, self) for x in self._data[KEY_DEVICE_FUNCTIONBLOCKS]
-            ]
+            outputs = [QbusMqttOutput(x, self) for x in self._data[KEY_DEVICE_FUNCTIONBLOCKS]]
 
         return outputs
 
@@ -141,11 +138,7 @@ class QbusDiscovery:
     def get_device_by_serial(self, serial: str) -> QbusMqttDevice | None:
         """Get the device by serial."""
         return next(
-            (
-                x
-                for x in self.devices
-                if x.serial_number.casefold() == serial.casefold()
-            ),
+            (x for x in self.devices if x.serial_number.casefold() == serial.casefold()),
             None,
         )
 
