@@ -8,6 +8,9 @@ from .const import (
     KEY_OUTPUT_ID,
     KEY_OUTPUT_PROPERTIES,
     KEY_OUTPUT_TYPE,
+    KEY_PROPERTIES_SHUTTER_POSITION,
+    KEY_PROPERTIES_SLAT_POSITION,
+    KEY_PROPERTIES_STATE,
     KEY_PROPERTIES_VALUE,
 )
 
@@ -151,3 +154,40 @@ class QbusMqttAnalogState(QbusMqttState):
     def write_percentage(self, percentage: float) -> None:
         """Set the value of the Qbus output."""
         self.write_property(KEY_PROPERTIES_VALUE, percentage)
+
+
+class QbusMqttShutterState(QbusMqttState):
+    """MQTT representation of a Qbus shutter output."""
+
+    def __init__(
+        self,
+        data: dict | None = None,
+        *,
+        id: str | None = None,
+        type: str | None = None,
+    ) -> None:
+        super().__init__(data, id=id, type=type)
+
+    def read_state(self) -> str | None:
+        """Read the state of the Qbus output."""
+        return self.read_property(KEY_PROPERTIES_STATE, None)
+
+    def write_state(self, state: str) -> None:
+        """Set the state of the Qbus output."""
+        self.write_property(KEY_PROPERTIES_STATE, state)
+
+    def read_position(self) -> int | None:
+        """Read the position of the Qbus output."""
+        return self.read_property(KEY_PROPERTIES_SHUTTER_POSITION, None)
+
+    def write_position(self, percentage: int) -> None:
+        """Set the position of the Qbus output."""
+        self.write_property(KEY_PROPERTIES_SHUTTER_POSITION, percentage)
+
+    def read_slat_position(self) -> int | None:
+        """Read the slat position of the Qbus output."""
+        return self.read_property(KEY_PROPERTIES_SLAT_POSITION, None)
+
+    def write_slat_position(self, percentage: int) -> None:
+        """Set the slat position of the Qbus output."""
+        self.write_property(KEY_PROPERTIES_SLAT_POSITION, percentage)
