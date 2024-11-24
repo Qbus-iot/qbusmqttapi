@@ -11,7 +11,7 @@ from .const import (
 )
 from .discovery import QbusDiscovery, QbusMqttDevice
 from .state import (
-    QbusMqttControllerState,
+    QbusMqttDeviceState,
     QbusMqttGatewayState,
     QbusMqttState,
     StateAction,
@@ -56,11 +56,11 @@ class QbusMqttMessageFactory:
 
         return discovery
 
-    def parse_controller_state(self, payload: str | bytes) -> QbusMqttControllerState | None:
+    def parse_device_state(self, payload: str | bytes) -> QbusMqttDeviceState | None:
         """Parse an MQTT message and return an instance
-        of QbusMqttControllerState if successful, otherwise None."""
+        of QbusMqttDeviceState if successful, otherwise None."""
 
-        return self.deserialize(QbusMqttControllerState, payload)
+        return self.deserialize(QbusMqttDeviceState, payload)
 
     def parse_output_state(self, cls: type[T], payload: str | bytes) -> T | None:
         """Parse an MQTT message and return an instance

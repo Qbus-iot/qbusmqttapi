@@ -14,10 +14,10 @@ from .const import (
     KEY_PROPERTIES_VALUE,
 )
 
-KEY_CONTROLLER_CONNECTABLE = "connectable"
-KEY_CONTROLLER_CONNECTED = "connected"
-KEY_CONTROLLER_ID = "id"
-KEY_CONTROLLER_STATE_PROPERTIES = "properties"
+KEY_DEVICE_CONNECTABLE = "connectable"
+KEY_DEVICE_CONNECTED = "connected"
+KEY_DEVICE_ID = "id"
+KEY_DEVICE_STATE_PROPERTIES = "properties"
 
 KEY_GATEWAY_ID = "id"
 KEY_GATEWAY_ONLINE = "online"
@@ -39,7 +39,7 @@ class StateAction(StrEnum):
 
 
 class QbusMqttGatewayState:
-    """MQTT representation a Qbus gateway state."""
+    """MQTT representation of a Qbus gateway state."""
 
     def __init__(self, data: dict) -> None:
         """Initialize based on a json loaded dictionary."""
@@ -48,25 +48,25 @@ class QbusMqttGatewayState:
         self.reason: str | None = data.get(KEY_GATEWAY_REASON)
 
 
-class QbusMqttControllerStateProperties:
-    """MQTT representation a Qbus controller its state properties."""
+class QbusMqttDeviceStateProperties:
+    """MQTT representation of a Qbus device its state properties."""
 
     def __init__(self, data: dict) -> None:
         """Initialize based on a json loaded dictionary."""
-        self.connectable: bool | None = data.get(KEY_CONTROLLER_CONNECTABLE)
-        self.connected: bool | None = data.get(KEY_CONTROLLER_CONNECTED)
+        self.connectable: bool | None = data.get(KEY_DEVICE_CONNECTABLE)
+        self.connected: bool | None = data.get(KEY_DEVICE_CONNECTED)
 
 
-class QbusMqttControllerState:
-    """MQTT representation of a Qbus controller state."""
+class QbusMqttDeviceState:
+    """MQTT representation of a Qbus device state."""
 
     def __init__(self, data: dict) -> None:
         """Initialize based on a json loaded dictionary."""
-        self.id: str | None = data.get(KEY_CONTROLLER_ID)
+        self.id: str | None = data.get(KEY_DEVICE_ID)
 
-        properties = data.get(KEY_CONTROLLER_STATE_PROPERTIES)
-        self.properties: QbusMqttControllerStateProperties | None = (
-            QbusMqttControllerStateProperties(properties) if properties is not None else None
+        properties = data.get(KEY_DEVICE_STATE_PROPERTIES)
+        self.properties: QbusMqttDeviceStateProperties | None = (
+            QbusMqttDeviceStateProperties(properties) if properties is not None else None
         )
 
 
