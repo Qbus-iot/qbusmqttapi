@@ -20,13 +20,14 @@ from .state import (
 
 _LOGGER = logging.getLogger(__name__)
 
+type ReceivePayloadType = str | bytes | bytearray
 
 @dataclass
 class QbusMqttRequestMessage:
     """Qbus MQTT request data class."""
 
     topic: str
-    payload: str | bytes
+    payload: ReceivePayloadType
 
 
 class QbusMqttMessageFactory:
@@ -37,13 +38,13 @@ class QbusMqttMessageFactory:
     def __init__(self) -> None:
         self._topic_factory = QbusMqttTopicFactory()
 
-    def parse_gateway_state(self, payload: str | bytes) -> QbusMqttGatewayState | None:
+    def parse_gateway_state(self, payload: ReceivePayloadType) -> QbusMqttGatewayState | None:
         """Parse an MQTT message and return an instance
         of QbusMqttGatewayState if successful, otherwise None."""
 
         return self.deserialize(QbusMqttGatewayState, payload)
 
-    def parse_discovery(self, payload: str | bytes) -> QbusDiscovery | None:
+    def parse_discovery(self, payload: ReceivePayloadType) -> QbusDiscovery | None:
         """Parse an MQTT message and return an instance
         of QbusDiscovery if successful, otherwise None."""
 
@@ -56,13 +57,13 @@ class QbusMqttMessageFactory:
 
         return discovery
 
-    def parse_device_state(self, payload: str | bytes) -> QbusMqttDeviceState | None:
+    def parse_device_state(self, payload: ReceivePayloadType) -> QbusMqttDeviceState | None:
         """Parse an MQTT message and return an instance
         of QbusMqttDeviceState if successful, otherwise None."""
 
         return self.deserialize(QbusMqttDeviceState, payload)
 
-    def parse_output_state(self, cls: type[T], payload: str | bytes) -> T | None:
+    def parse_output_state(self, cls: type[T], payload: ReceivePayloadType) -> T | None:
         """Parse an MQTT message and return an instance
         of T if successful, otherwise None."""
 
@@ -99,7 +100,7 @@ class QbusMqttMessageFactory:
         """Convert an object to json payload."""
         return json.dumps(obj, cls=IgnoreNoneJsonEncoder)
 
-    def deserialize(self, state_cls: type[Any], payload: str | bytes) -> Any | None:
+    def deserialize(self, state_cls: type[Any], payload: ReceivePayloadType) -> Any | None:
         """Parse an MQTT message and return the requested type if successful, otherwise None."""
 
         if payload is None:
