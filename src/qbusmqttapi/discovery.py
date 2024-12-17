@@ -5,6 +5,8 @@ from __future__ import annotations
 from .const import (
     KEY_OUTPUT_ACTIONS,
     KEY_OUTPUT_ID,
+    KEY_OUTPUT_LOCATION,
+    KEY_OUTPUT_LOCATION_ID,
     KEY_OUTPUT_NAME,
     KEY_OUTPUT_PROPERTIES,
     KEY_OUTPUT_REF_ID,
@@ -60,6 +62,16 @@ class QbusMqttOutput:
     def actions(self) -> dict:
         """Return the actions."""
         return self._data.get(KEY_OUTPUT_ACTIONS) or {}
+
+    @property
+    def location(self) -> str:
+        """Return the location."""
+        return self._data.get(KEY_OUTPUT_LOCATION) or ""
+
+    @property
+    def location_id(self) -> int:
+        """Return the location id."""
+        return self._data.get(KEY_OUTPUT_LOCATION_ID) or 0
 
     @property
     def device(self) -> QbusMqttDevice:
