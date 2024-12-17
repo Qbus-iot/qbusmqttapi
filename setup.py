@@ -2,7 +2,7 @@ from pathlib import Path
 
 import setuptools
 
-VERSION = "1.2.0"  # PEP-440
+VERSION = "1.2.1"  # PEP-440
 
 setuptools.setup(
     name="qbusmqttapi",
@@ -20,6 +20,7 @@ setuptools.setup(
         "Environment :: Console",
         "Programming Language :: Python :: 3.10",
     ],
+    package_data={'qbusmqttapi': ['py.typed']},
     python_requires=">=3.8",
     # Requirements
     long_description=Path("README.md").read_text(),
