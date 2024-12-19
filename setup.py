@@ -2,7 +2,7 @@ from pathlib import Path
 
 import setuptools
 
-VERSION = "1.2.2"  # PEP-440
+VERSION = "1.2.3"  # PEP-440
 
 setuptools.setup(
     name="qbusmqttapi",
@@ -16,7 +16,7 @@ setuptools.setup(
     author_email="ks@qbus.be",
     license="MIT License 2024",
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Environment :: Console",
         "Programming Language :: Python :: 3.10",
     ],

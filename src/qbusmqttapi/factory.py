@@ -20,14 +20,16 @@ from .state import (
 
 _LOGGER = logging.getLogger(__name__)
 
+type PublishPayloadType = str | bytes | int | float | None
 type ReceivePayloadType = str | bytes | bytearray
+
 
 @dataclass
 class QbusMqttRequestMessage:
     """Qbus MQTT request data class."""
 
     topic: str
-    payload: ReceivePayloadType
+    payload: PublishPayloadType
 
 
 class QbusMqttMessageFactory:
