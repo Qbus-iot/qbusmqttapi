@@ -130,9 +130,9 @@ class QbusMqttOnOffState(QbusMqttState):
         """Read the value of the Qbus output."""
         return self.read_property(KEY_PROPERTIES_VALUE, False)
 
-    def write_value(self, value: bool) -> None:
-        """Set the value of the Qbus output."""
-        self.write_property(KEY_PROPERTIES_VALUE, value)
+    def write_value(self, on: bool) -> None:
+        """Set the Qbus output on or off."""
+        self.write_property(KEY_PROPERTIES_VALUE, on)
 
 
 class QbusMqttAnalogState(QbusMqttState):
@@ -154,6 +154,10 @@ class QbusMqttAnalogState(QbusMqttState):
     def write_percentage(self, percentage: float) -> None:
         """Set the value of the Qbus output."""
         self.write_property(KEY_PROPERTIES_VALUE, percentage)
+
+    def write_on_off(self, on: bool) -> None:
+        """Set the Qbus output on or off."""
+        self.action = "on" if on else "off"
 
 
 class QbusMqttShutterState(QbusMqttState):
