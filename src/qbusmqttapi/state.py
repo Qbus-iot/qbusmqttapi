@@ -32,6 +32,7 @@ class StateType(StrEnum):
     """Values to be used as state type."""
 
     ACTION = "action"
+    EVENT = "event"
     STATE = "state"
 
 
