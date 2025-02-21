@@ -1,5 +1,6 @@
 """Qbus state models."""
 
+from decimal import Decimal
 from enum import StrEnum
 from typing import Any
 
@@ -8,9 +9,12 @@ from .const import (
     KEY_OUTPUT_ID,
     KEY_OUTPUT_PROPERTIES,
     KEY_OUTPUT_TYPE,
+    KEY_PROPERTIES_CURRENT_TEMPERATURE,
+    KEY_PROPERTIES_REGIME,
     KEY_PROPERTIES_SHUTTER_POSITION,
     KEY_PROPERTIES_SLAT_POSITION,
     KEY_PROPERTIES_STATE,
+    KEY_PROPERTIES_SET_TEMPERATURE,
     KEY_PROPERTIES_VALUE,
 )
 
@@ -195,3 +199,36 @@ class QbusMqttShutterState(QbusMqttState):
     def write_slat_position(self, percentage: int) -> None:
         """Set the slat position of the Qbus output."""
         self.write_property(KEY_PROPERTIES_SLAT_POSITION, percentage)
+
+
+class QbusMqttThermoState(QbusMqttState):
+    """MQTT representation of a Qbus thermo output."""
+
+    def __init__(
+        self,
+        data: dict | None = None,
+        *,
+        id: str | None = None,
+        type: str | None = None,
+    ) -> None:
+        super().__init__(data, id=id, type=type)
+    
+    def read_current_temperature(self) -> Decimal | None:
+        """Read the current temperature of the Qbus output."""
+        return self.read_property(KEY_PROPERTIES_CURRENT_TEMPERATURE, None)
+
+    def read_set_temperature(self) -> Decimal | None:
+        """Read the set temperature of the Qbus output."""
+        return self.read_property(KEY_PROPERTIES_SET_TEMPERATURE, None)
+    
+    def write_set_temperature(self, temperature: Decimal) -> None:
+        """Set the set temperature of the Qbus output."""
+        self.write_property(KEY_PROPERTIES_SET_TEMPERATURE, temperature)
+
+    def read_regime(self) -> str | None:
+        """Read the regime of the Qbus output."""
+        return self.read_property(KEY_PROPERTIES_REGIME, None)
+    
+    def write_regime(self, regime: str) -> None:
+        """Set the regime of the Qbus output."""
+        self.write_property(KEY_PROPERTIES_REGIME, regime)
