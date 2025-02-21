@@ -1,6 +1,5 @@
 """Qbus state models."""
 
-from decimal import Decimal
 from enum import StrEnum
 from typing import Any
 
@@ -214,15 +213,15 @@ class QbusMqttThermoState(QbusMqttState):
     ) -> None:
         super().__init__(data, id=id, type=type)
     
-    def read_current_temperature(self) -> Decimal | None:
+    def read_current_temperature(self) -> float | None:
         """Read the current temperature of the Qbus output."""
         return self.read_property(KEY_PROPERTIES_CURRENT_TEMPERATURE, None)
 
-    def read_set_temperature(self) -> Decimal | None:
+    def read_set_temperature(self) -> float | None:
         """Read the set temperature of the Qbus output."""
         return self.read_property(KEY_PROPERTIES_SET_TEMPERATURE, None)
     
-    def write_set_temperature(self, temperature: Decimal) -> None:
+    def write_set_temperature(self, temperature: float) -> None:
         """Set the set temperature of the Qbus output."""
         self.write_property(KEY_PROPERTIES_SET_TEMPERATURE, temperature)
 
