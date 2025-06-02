@@ -11,6 +11,7 @@ from .const import (
     KEY_OUTPUT_PROPERTIES,
     KEY_OUTPUT_REF_ID,
     KEY_OUTPUT_TYPE,
+    KEY_OUTPUT_VARIANT,
 )
 
 KEY_DEVICES = "devices"
@@ -72,6 +73,16 @@ class QbusMqttOutput:
     def location_id(self) -> int:
         """Return the location id."""
         return self._data.get(KEY_OUTPUT_LOCATION_ID) or 0
+
+    @property
+    def variant(self) -> str | tuple | list:
+        """Return the variant."""
+        value = self._data.get(KEY_OUTPUT_VARIANT) or ""
+
+        if isinstance(value, list | tuple):
+            value = [x for x in value if x is not None]
+
+        return value
 
     @property
     def device(self) -> QbusMqttDevice:
