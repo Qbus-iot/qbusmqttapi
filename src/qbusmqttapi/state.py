@@ -42,6 +42,13 @@ class StateAction(StrEnum):
     ACTIVE = "active"
 
 
+class GaugeKey(StrEnum):
+    """Keys to read gauge state."""
+
+    CURRENT_VALUE = "currentValue"
+    CONSUMPTION_VALUE = "consumptionValue"
+
+
 class QbusMqttGatewayState:
     """MQTT representation of a Qbus gateway state."""
 
@@ -232,3 +239,20 @@ class QbusMqttThermoState(QbusMqttState):
     def write_regime(self, regime: str) -> None:
         """Set the regime of the Qbus output."""
         self.write_property(KEY_PROPERTIES_REGIME, regime)
+
+
+class QbusMqttGaugeState(QbusMqttState):
+    """MQTT representation of a Qbus gauge output."""
+
+    def __init__(
+        self,
+        data: dict | None = None,
+        *,
+        id: str | None = None,
+        type: str | None = None,
+    ) -> None:
+        super().__init__(data, id=id, type=type)
+
+    def read_value(self, key: GaugeKey) -> float:
+        """Read the value of the Qbus output."""
+        return self.read_property(key, 0)

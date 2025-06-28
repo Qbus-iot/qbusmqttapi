@@ -152,7 +152,7 @@ class QbusDiscovery:
         if KEY_DEVICES in data:
             self._devices = [QbusMqttDevice(x) for x in data[KEY_DEVICES]]
 
-        self._name = data["app"]
+        self._name: str = data["app"]
 
     def get_device_by_id(self, id: str) -> QbusMqttDevice | None:
         """Get the device by id."""
@@ -171,6 +171,6 @@ class QbusDiscovery:
         return self._devices
 
     @property
-    def name(self):
+    def name(self) -> str:
         """Return device name."""
         return self._name

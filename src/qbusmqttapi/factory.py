@@ -105,7 +105,7 @@ class QbusMqttMessageFactory:
     def deserialize(self, state_cls: type[Any], payload: ReceivePayloadType) -> Any | None:
         """Parse an MQTT message and return the requested type if successful, otherwise None."""
 
-        if payload is None:
+        if not payload:
             _LOGGER.warning("Empty state payload for %s", state_cls.__name__)
             return None
 
@@ -157,7 +157,7 @@ class QbusMqttTopicFactory:
 class IgnoreNoneJsonEncoder(json.JSONEncoder):
     """A json encoder to ignore None values when serializing."""
 
-    def default(self, o):
+    def default(self, o: Any) -> Any:
         if hasattr(o, "__dict__"):
             # Filter out None values
             return {k: v for k, v in o.__dict__.items() if v is not None}
