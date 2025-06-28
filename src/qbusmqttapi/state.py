@@ -8,6 +8,7 @@ from .const import (
     KEY_OUTPUT_ID,
     KEY_OUTPUT_PROPERTIES,
     KEY_OUTPUT_TYPE,
+    KEY_PROPERTIES_CO2,
     KEY_PROPERTIES_CURRENT_TEMPERATURE,
     KEY_PROPERTIES_REGIME,
     KEY_PROPERTIES_SHUTTER_POSITION,
@@ -256,3 +257,20 @@ class QbusMqttGaugeState(QbusMqttState):
     def read_value(self, key: GaugeKey) -> float:
         """Read the value of the Qbus output."""
         return self.read_property(key, 0)
+
+
+class QbusMqttVentilationState(QbusMqttState):
+    """MQTT representation of a Qbus ventilation output."""
+
+    def __init__(
+        self,
+        data: dict | None = None,
+        *,
+        id: str | None = None,
+        type: str | None = None,
+    ) -> None:
+        super().__init__(data, id=id, type=type)
+
+    def read_co2(self) -> float:
+        """Read the co2 of the Qbus output."""
+        return self.read_property(KEY_PROPERTIES_CO2, 0)
