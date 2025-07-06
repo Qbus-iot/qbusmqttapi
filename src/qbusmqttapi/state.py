@@ -274,3 +274,20 @@ class QbusMqttVentilationState(QbusMqttState):
     def read_co2(self) -> float:
         """Read the co2 of the Qbus output."""
         return self.read_property(KEY_PROPERTIES_CO2, 0)
+
+
+class QbusMqttHumidityState(QbusMqttState):
+    """MQTT representation of a Qbus humidity output."""
+
+    def __init__(
+        self,
+        data: dict | None = None,
+        *,
+        id: str | None = None,
+        type: str | None = None,
+    ) -> None:
+        super().__init__(data, id=id, type=type)
+
+    def read_value(self) -> float:
+        """Read the value of the Qbus output."""
+        return self.read_property(KEY_PROPERTIES_VALUE, 0)
