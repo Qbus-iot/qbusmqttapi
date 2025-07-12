@@ -43,11 +43,25 @@ class StateAction(StrEnum):
     ACTIVE = "active"
 
 
-class GaugeKey(StrEnum):
+class GaugeStateProperty(StrEnum):
     """Keys to read gauge state."""
 
     CURRENT_VALUE = "currentValue"
     CONSUMPTION_VALUE = "consumptionValue"
+
+
+class WeatherStationStateProperty(StrEnum):
+    """Keys to read the weahter station state."""
+    
+    DAYLIGHT = "dayLight"
+    LIGHT = "light"
+    LIGHT_EAST = "lightEast"
+    LIGHT_SOUTH = "lightSouth"
+    LIGHT_WEST = "lightWest"
+    RAINING = "raining"
+    TEMPERATURE = "temperature"
+    TWILIGHT = "twilight"
+    WIND = "wind"
 
 
 class QbusMqttGatewayState:
@@ -254,7 +268,7 @@ class QbusMqttGaugeState(QbusMqttState):
     ) -> None:
         super().__init__(data, id=id, type=type)
 
-    def read_value(self, key: GaugeKey) -> float:
+    def read_value(self, key: GaugeStateProperty) -> float:
         """Read the value of the Qbus output."""
         return self.read_property(key, 0)
 
@@ -274,3 +288,69 @@ class QbusMqttVentilationState(QbusMqttState):
     def read_co2(self) -> float:
         """Read the co2 of the Qbus output."""
         return self.read_property(KEY_PROPERTIES_CO2, 0)
+
+
+class QbusMqttHumidityState(QbusMqttState):
+    """MQTT representation of a Qbus humidity output."""
+
+    def __init__(
+        self,
+        data: dict | None = None,
+        *,
+        id: str | None = None,
+        type: str | None = None,
+    ) -> None:
+        super().__init__(data, id=id, type=type)
+
+    def read_value(self) -> float:
+        """Read the value of the Qbus output."""
+        return self.read_property(KEY_PROPERTIES_VALUE, 0)
+
+
+class QbusMqttWeatherState(QbusMqttState):
+    """MQTT representation of a Qbus weather station output."""
+
+    def __init__(
+        self,
+        data: dict | None = None,
+        *,
+        id: str | None = None,
+        type: str | None = None,
+    ) -> None:
+        super().__init__(data, id=id, type=type)
+        
+    def read_daylight(self) -> float:
+        """Read the daylight status of the weather station."""
+        return self.read_property(WeatherStationStateProperty.DAYLIGHT, 0)
+        
+    def read_light(self) -> float:
+        """Read the light level of the weather station."""
+        return self.read_property(WeatherStationStateProperty.LIGHT, 0)
+        
+    def read_light_east(self) -> float:
+        """Read the east-facing light level of the weather station."""
+        return self.read_property(WeatherStationStateProperty.LIGHT_EAST, 0)
+        
+    def read_light_south(self) -> float:
+        """Read the south-facing light level of the weather station."""
+        return self.read_property(WeatherStationStateProperty.LIGHT_SOUTH, 0)
+        
+    def read_light_west(self) -> float:
+        """Read the west-facing light level of the weather station."""
+        return self.read_property(WeatherStationStateProperty.LIGHT_WEST, 0)
+        
+    def read_raining(self) -> bool:
+        """Read the rain status of the weather station."""
+        return self.read_property(WeatherStationStateProperty.RAINING, False)
+        
+    def read_temperature(self) -> float:
+        """Read the temperature from the weather station."""
+        return self.read_property(WeatherStationStateProperty.TEMPERATURE, 0)
+        
+    def read_twilight(self) -> bool:
+        """Read the twilight status of the weather station."""
+        return self.read_property(WeatherStationStateProperty.TWILIGHT, False)
+        
+    def read_wind(self) -> float:
+        """Read the wind speed from the weather station."""
+        return self.read_property(WeatherStationStateProperty.WIND, 0)
