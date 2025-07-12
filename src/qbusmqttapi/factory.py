@@ -1,14 +1,11 @@
 """Qbus MQTT factory."""
 
+from dataclasses import dataclass
 import json
 import logging
-from dataclasses import dataclass
 from typing import Any, TypeVar
 
-from .const import (
-    KEY_PROPERTIES_AUTHKEY,
-    TOPIC_PREFIX,
-)
+from .const import KEY_PROPERTIES_AUTHKEY, TOPIC_PREFIX
 from .discovery import QbusDiscovery, QbusMqttDevice
 from .state import (
     QbusMqttDeviceState,
@@ -38,17 +35,17 @@ class QbusMqttMessageFactory:
     T = TypeVar("T", bound="QbusMqttState")
 
     def __init__(self) -> None:
+        """Initialize message factory."""
+
         self._topic_factory = QbusMqttTopicFactory()
 
     def parse_gateway_state(self, payload: ReceivePayloadType) -> QbusMqttGatewayState | None:
-        """Parse an MQTT message and return an instance
-        of QbusMqttGatewayState if successful, otherwise None."""
+        """Parse an MQTT message and return an instance of QbusMqttGatewayState if successful, otherwise None."""
 
         return self.deserialize(QbusMqttGatewayState, payload)
 
     def parse_discovery(self, payload: ReceivePayloadType) -> QbusDiscovery | None:
-        """Parse an MQTT message and return an instance
-        of QbusDiscovery if successful, otherwise None."""
+        """Parse an MQTT message and return an instance of QbusDiscovery if successful, otherwise None."""
 
         discovery: QbusDiscovery | None = self.deserialize(QbusDiscovery, payload)
 
@@ -60,19 +57,18 @@ class QbusMqttMessageFactory:
         return discovery
 
     def parse_device_state(self, payload: ReceivePayloadType) -> QbusMqttDeviceState | None:
-        """Parse an MQTT message and return an instance
-        of QbusMqttDeviceState if successful, otherwise None."""
+        """Parse an MQTT message and return an instance of QbusMqttDeviceState if successful, otherwise None."""
 
         return self.deserialize(QbusMqttDeviceState, payload)
 
     def parse_output_state(self, cls: type[T], payload: ReceivePayloadType) -> T | None:
-        """Parse an MQTT message and return an instance
-        of T if successful, otherwise None."""
+        """Parse an MQTT message and return an instance of T if successful, otherwise None."""
 
         return self.deserialize(cls, payload)
 
     def create_device_activate_request(self, device: QbusMqttDevice, prefix: str = TOPIC_PREFIX) -> QbusMqttRequestMessage:
         """Create a message to request device activation."""
+
         state = QbusMqttState(id=device.id, type=StateType.ACTION, action=StateAction.ACTIVATE)
         state.write_property(KEY_PROPERTIES_AUTHKEY, "ubielite")
 
@@ -158,6 +154,7 @@ class IgnoreNoneJsonEncoder(json.JSONEncoder):
     """A json encoder to ignore None values when serializing."""
 
     def default(self, o: Any) -> Any:
+        """Return a serializable object without None values in dictionaries."""
         if hasattr(o, "__dict__"):
             # Filter out None values
             return {k: v for k, v in o.__dict__.items() if v is not None}

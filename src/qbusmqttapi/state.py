@@ -11,10 +11,10 @@ from .const import (
     KEY_PROPERTIES_CO2,
     KEY_PROPERTIES_CURRENT_TEMPERATURE,
     KEY_PROPERTIES_REGIME,
+    KEY_PROPERTIES_SET_TEMPERATURE,
     KEY_PROPERTIES_SHUTTER_POSITION,
     KEY_PROPERTIES_SLAT_POSITION,
     KEY_PROPERTIES_STATE,
-    KEY_PROPERTIES_SET_TEMPERATURE,
     KEY_PROPERTIES_VALUE,
 )
 
@@ -52,7 +52,7 @@ class GaugeStateProperty(StrEnum):
 
 class WeatherStationStateProperty(StrEnum):
     """Keys to read the weahter station state."""
-    
+
     DAYLIGHT = "dayLight"
     LIGHT = "light"
     LIGHT_EAST = "lightEast"
@@ -150,6 +150,7 @@ class QbusMqttOnOffState(QbusMqttState):
         id: str | None = None,
         type: str | None = None,
     ) -> None:
+        """Initialize state."""
         super().__init__(data, id=id, type=type)
 
     def read_value(self) -> bool:
@@ -171,6 +172,7 @@ class QbusMqttAnalogState(QbusMqttState):
         id: str | None = None,
         type: str | None = None,
     ) -> None:
+        """Initialize state."""
         super().__init__(data, id=id, type=type)
 
     def read_percentage(self) -> float:
@@ -196,6 +198,7 @@ class QbusMqttShutterState(QbusMqttState):
         id: str | None = None,
         type: str | None = None,
     ) -> None:
+        """Initialize state."""
         super().__init__(data, id=id, type=type)
 
     def read_state(self) -> str | None:
@@ -233,8 +236,9 @@ class QbusMqttThermoState(QbusMqttState):
         id: str | None = None,
         type: str | None = None,
     ) -> None:
+        """Initialize state."""
         super().__init__(data, id=id, type=type)
-    
+
     def read_current_temperature(self) -> float | None:
         """Read the current temperature of the Qbus output."""
         return self.read_property(KEY_PROPERTIES_CURRENT_TEMPERATURE, None)
@@ -242,7 +246,7 @@ class QbusMqttThermoState(QbusMqttState):
     def read_set_temperature(self) -> float | None:
         """Read the set temperature of the Qbus output."""
         return self.read_property(KEY_PROPERTIES_SET_TEMPERATURE, None)
-    
+
     def write_set_temperature(self, temperature: float) -> None:
         """Set the set temperature of the Qbus output."""
         self.write_property(KEY_PROPERTIES_SET_TEMPERATURE, temperature)
@@ -250,7 +254,7 @@ class QbusMqttThermoState(QbusMqttState):
     def read_regime(self) -> str | None:
         """Read the regime of the Qbus output."""
         return self.read_property(KEY_PROPERTIES_REGIME, None)
-    
+
     def write_regime(self, regime: str) -> None:
         """Set the regime of the Qbus output."""
         self.write_property(KEY_PROPERTIES_REGIME, regime)
@@ -266,6 +270,7 @@ class QbusMqttGaugeState(QbusMqttState):
         id: str | None = None,
         type: str | None = None,
     ) -> None:
+        """Initialize state."""
         super().__init__(data, id=id, type=type)
 
     def read_value(self, key: GaugeStateProperty) -> float:
@@ -283,6 +288,7 @@ class QbusMqttVentilationState(QbusMqttState):
         id: str | None = None,
         type: str | None = None,
     ) -> None:
+        """Initialize state."""
         super().__init__(data, id=id, type=type)
 
     def read_co2(self) -> float:
@@ -300,6 +306,7 @@ class QbusMqttHumidityState(QbusMqttState):
         id: str | None = None,
         type: str | None = None,
     ) -> None:
+        """Initialize state."""
         super().__init__(data, id=id, type=type)
 
     def read_value(self) -> float:
@@ -317,40 +324,41 @@ class QbusMqttWeatherState(QbusMqttState):
         id: str | None = None,
         type: str | None = None,
     ) -> None:
+        """Initialize state."""
         super().__init__(data, id=id, type=type)
-        
+
     def read_daylight(self) -> float:
         """Read the daylight status of the weather station."""
         return self.read_property(WeatherStationStateProperty.DAYLIGHT, 0)
-        
+
     def read_light(self) -> float:
         """Read the light level of the weather station."""
         return self.read_property(WeatherStationStateProperty.LIGHT, 0)
-        
+
     def read_light_east(self) -> float:
         """Read the east-facing light level of the weather station."""
         return self.read_property(WeatherStationStateProperty.LIGHT_EAST, 0)
-        
+
     def read_light_south(self) -> float:
         """Read the south-facing light level of the weather station."""
         return self.read_property(WeatherStationStateProperty.LIGHT_SOUTH, 0)
-        
+
     def read_light_west(self) -> float:
         """Read the west-facing light level of the weather station."""
         return self.read_property(WeatherStationStateProperty.LIGHT_WEST, 0)
-        
+
     def read_raining(self) -> bool:
         """Read the rain status of the weather station."""
         return self.read_property(WeatherStationStateProperty.RAINING, False)
-        
+
     def read_temperature(self) -> float:
         """Read the temperature from the weather station."""
         return self.read_property(WeatherStationStateProperty.TEMPERATURE, 0)
-        
+
     def read_twilight(self) -> bool:
         """Read the twilight status of the weather station."""
         return self.read_property(WeatherStationStateProperty.TWILIGHT, False)
-        
+
     def read_wind(self) -> float:
         """Read the wind speed from the weather station."""
         return self.read_property(WeatherStationStateProperty.WIND, 0)
