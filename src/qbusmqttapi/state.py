@@ -175,9 +175,9 @@ class QbusMqttAnalogState(QbusMqttState):
         """Initialize state."""
         super().__init__(data, id=id, type=type)
 
-    def read_percentage(self) -> float:
+    def read_percentage(self) -> float | None:
         """Read the value of the Qbus output."""
-        return self.read_property(KEY_PROPERTIES_VALUE, 0)
+        return self.read_property(KEY_PROPERTIES_VALUE, None)
 
     def write_percentage(self, percentage: float) -> None:
         """Set the value of the Qbus output."""
