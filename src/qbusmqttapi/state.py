@@ -10,6 +10,7 @@ from .const import (
     KEY_OUTPUT_TYPE,
     KEY_PROPERTIES_CO2,
     KEY_PROPERTIES_CURRENT_TEMPERATURE,
+    KEY_PROPERTIES_REFRESH,
     KEY_PROPERTIES_REGIME,
     KEY_PROPERTIES_SET_TEMPERATURE,
     KEY_PROPERTIES_SHUTTER_POSITION,
@@ -294,6 +295,18 @@ class QbusMqttVentilationState(QbusMqttState):
     def read_co2(self) -> float:
         """Read the co2 of the Qbus output."""
         return self.read_property(KEY_PROPERTIES_CO2, 0)
+
+    def read_refresh(self) -> int:
+        """Read the co2 of the Qbus output."""
+        return self.read_property(KEY_PROPERTIES_REFRESH, 0)
+
+    def read_regime(self) -> str | None:
+        """Read the regime of the Qbus output."""
+        return self.read_property(KEY_PROPERTIES_REGIME, None)
+
+    def write_regime(self, regime: str) -> None:
+        """Set the regime of the Qbus output."""
+        self.write_property(KEY_PROPERTIES_REGIME, regime)
 
 
 class QbusMqttHumidityState(QbusMqttState):
