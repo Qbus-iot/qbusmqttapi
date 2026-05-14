@@ -362,3 +362,25 @@ class QbusMqttWeatherState(QbusMqttState):
     def read_wind(self) -> float:
         """Read the wind speed from the weather station."""
         return self.read_property(WeatherStationStateProperty.WIND, 0)
+
+
+class QbusMqttStepperState(QbusMqttState):
+    """MQTT representation of a Qbus stepper output."""
+
+    def __init__(
+        self,
+        data: dict | None = None,
+        *,
+        id: str | None = None,
+        type: str | None = None,
+    ) -> None:
+        """Initialize state."""
+        super().__init__(data, id=id, type=type)
+
+    def read_value(self) -> int | None:
+        """Read the value of the Qbus output."""
+        return self.read_property(KEY_PROPERTIES_VALUE, None)
+
+    def write_value(self, value: int) -> None:
+        """Set the Qbus output on or off."""
+        self.write_property(KEY_PROPERTIES_VALUE, value)
