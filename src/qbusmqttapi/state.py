@@ -313,6 +313,14 @@ class QbusMqttHumidityState(QbusMqttState):
         """Read the value of the Qbus output."""
         return self.read_property(KEY_PROPERTIES_VALUE, 0)
 
+    def read_regime(self) -> str | None:
+        """Read the regime of the Qbus output."""
+        return self.read_property(KEY_PROPERTIES_REGIME, None)
+
+    def write_regime(self, regime: str) -> None:
+        """Set the regime of the Qbus output."""
+        self.write_property(KEY_PROPERTIES_REGIME, regime)
+
 
 class QbusMqttWeatherState(QbusMqttState):
     """MQTT representation of a Qbus weather station output."""
