@@ -471,7 +471,7 @@ class QbusMqttMultiColorState(QbusMqttState):
 
     def write_on(self, value: bool) -> None:
         """Set the Qbus output on or off."""
-        self.write_property(MultiColorStateProperty.ON, value)
+        self.action = "on" if value else "off"
 
     def read_preset_color(self) -> int | None:
         """Read the preset color of the Qbus output."""
