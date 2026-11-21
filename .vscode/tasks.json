@@ -9,6 +9,16 @@
             "command": "source .venv/bin/activate"
         },
         {
+            "label": "Run tests",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "-m", "pytest", "tests/",
+                "--cov", "qbusmqttapi",
+                "--cov-report", "term-missing"
+            ]
+        },
+        {
             "label": "Build package",
             "type": "shell",
             "command": "${command:python.interpreterPath}",
