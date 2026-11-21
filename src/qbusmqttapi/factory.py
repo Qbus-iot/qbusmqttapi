@@ -5,9 +5,10 @@ import json
 import logging
 from typing import Any, TypeVar
 
-from .const import KEY_PROPERTIES_AUTHKEY, TOPIC_PREFIX
+from .const import TOPIC_PREFIX
 from .discovery import QbusDiscovery, QbusMqttDevice
 from .state import (
+    DeviceStateProperty,
     QbusMqttDeviceState,
     QbusMqttGatewayState,
     QbusMqttState,
@@ -70,7 +71,7 @@ class QbusMqttMessageFactory:
         """Create a message to request device activation."""
 
         state = QbusMqttState(id=device.id, type=StateType.ACTION, action=StateAction.ACTIVATE)
-        state.write_property(KEY_PROPERTIES_AUTHKEY, "ubielite")
+        state.write_property(DeviceStateProperty.AUTHKEY, "ubielite")
 
         return QbusMqttRequestMessage(
             self._topic_factory.get_device_command_topic(device.id, prefix),

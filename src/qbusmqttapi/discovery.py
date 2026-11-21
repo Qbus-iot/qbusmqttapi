@@ -2,18 +2,10 @@
 
 from __future__ import annotations
 
-from .const import (
-    KEY_OUTPUT_ACTIONS,
-    KEY_OUTPUT_ID,
-    KEY_OUTPUT_LOCATION,
-    KEY_OUTPUT_LOCATION_ID,
-    KEY_OUTPUT_NAME,
-    KEY_OUTPUT_PROPERTIES,
-    KEY_OUTPUT_REF_ID,
-    KEY_OUTPUT_TYPE,
-    KEY_OUTPUT_VARIANT,
-)
+from enum import StrEnum
 
+# Deprecated: use DiscoveryKey or DeviceKey instead.
+# Kept for backwards compatibility and will be removed in a future version.
 KEY_APP = "app"
 KEY_DEVICES = "devices"
 
@@ -27,6 +19,40 @@ KEY_DEVICE_TYPE = "type"
 KEY_DEVICE_VERSION = "version"
 
 
+class DiscoveryKey(StrEnum):
+    """Top-level keys to read the discovery data."""
+
+    APP = "app"
+    DEVICES = "devices"
+
+
+class DeviceKey(StrEnum):
+    """Top-level keys to read the device data."""
+
+    FUNCTIONBLOCKS = "functionBlocks"
+    ID = "id"
+    IP = "ip"
+    MAC = "mac"
+    NAME = "name"
+    SERIAL_NR = "serialNr"
+    TYPE = "type"
+    VERSION = "version"
+
+
+class OutputKey(StrEnum):
+    """Top-level keys to read the output data."""
+
+    ACTIONS = "actions"
+    ID = "id"
+    LOCATION = "location"
+    LOCATION_ID = "locationId"
+    NAME = "name"
+    PROPERTIES = "properties"
+    REF_ID = "refId"
+    TYPE = "type"
+    VARIANT = "variant"
+
+
 class QbusMqttOutput:
     """MQTT representation of a Qbus output."""
 
@@ -38,47 +64,47 @@ class QbusMqttOutput:
     @property
     def id(self) -> str:
         """Return the id."""
-        return self._data.get(KEY_OUTPUT_ID) or ""
+        return self._data.get(OutputKey.ID) or ""
 
     @property
     def type(self) -> str:
         """Return the type."""
-        return self._data.get(KEY_OUTPUT_TYPE) or ""
+        return self._data.get(OutputKey.TYPE) or ""
 
     @property
     def name(self) -> str:
         """Return the name."""
-        return self._data.get(KEY_OUTPUT_NAME) or ""
+        return self._data.get(OutputKey.NAME) or ""
 
     @property
     def ref_id(self) -> str:
         """Return the ref id."""
-        return self._data.get(KEY_OUTPUT_REF_ID) or ""
+        return self._data.get(OutputKey.REF_ID) or ""
 
     @property
     def properties(self) -> dict:
         """Return the properties."""
-        return self._data.get(KEY_OUTPUT_PROPERTIES) or {}
+        return self._data.get(OutputKey.PROPERTIES) or {}
 
     @property
     def actions(self) -> dict:
         """Return the actions."""
-        return self._data.get(KEY_OUTPUT_ACTIONS) or {}
+        return self._data.get(OutputKey.ACTIONS) or {}
 
     @property
     def location(self) -> str:
         """Return the location."""
-        return self._data.get(KEY_OUTPUT_LOCATION) or ""
+        return self._data.get(OutputKey.LOCATION) or ""
 
     @property
     def location_id(self) -> int:
         """Return the location id."""
-        return self._data.get(KEY_OUTPUT_LOCATION_ID) or 0
+        return self._data.get(OutputKey.LOCATION_ID) or 0
 
     @property
     def variant(self) -> str | tuple | list:
         """Return the variant."""
-        value = self._data.get(KEY_OUTPUT_VARIANT) or ""
+        value = self._data.get(OutputKey.VARIANT) or ""
 
         if isinstance(value, list | tuple):
             value = [x for x in value if x is not None]
@@ -101,37 +127,37 @@ class QbusMqttDevice:
     @property
     def id(self) -> str:
         """Return the id."""
-        return self._data.get(KEY_DEVICE_ID) or ""
+        return self._data.get(DeviceKey.ID) or ""
 
     @property
     def ip(self) -> str:
         """Return the ip address."""
-        return self._data.get(KEY_DEVICE_IP) or ""
+        return self._data.get(DeviceKey.IP) or ""
 
     @property
     def mac(self) -> str:
         """Return the ip address."""
-        return self._data.get(KEY_DEVICE_MAC) or ""
+        return self._data.get(DeviceKey.MAC) or ""
 
     @property
     def name(self) -> str:
         """Return the ip address."""
-        return self._data.get(KEY_DEVICE_NAME) or ""
+        return self._data.get(DeviceKey.NAME) or ""
 
     @property
     def serial_number(self) -> str:
         """Return the serial number."""
-        return self._data.get(KEY_DEVICE_SERIAL_NR) or ""
+        return self._data.get(DeviceKey.SERIAL_NR) or ""
 
     @property
     def type(self) -> str:
         """Return the mac address."""
-        return self._data.get(KEY_DEVICE_TYPE) or ""
+        return self._data.get(DeviceKey.TYPE) or ""
 
     @property
     def version(self) -> str:
         """Return the version."""
-        return self._data.get(KEY_DEVICE_VERSION) or ""
+        return self._data.get(DeviceKey.VERSION) or ""
 
     @property
     def outputs(self) -> list[QbusMqttOutput]:
@@ -139,8 +165,8 @@ class QbusMqttDevice:
 
         outputs: list[QbusMqttOutput] = []
 
-        if self._data.get(KEY_DEVICE_FUNCTIONBLOCKS):
-            outputs = [QbusMqttOutput(x, self) for x in self._data[KEY_DEVICE_FUNCTIONBLOCKS]]
+        if self._data.get(DeviceKey.FUNCTIONBLOCKS):
+            outputs = [QbusMqttOutput(x, self) for x in self._data[DeviceKey.FUNCTIONBLOCKS]]
 
         return outputs
 
@@ -150,8 +176,8 @@ class QbusDiscovery:
 
     def __init__(self, data: dict) -> None:
         """Initialize based on a json loaded dictionary."""
-        self._devices = [QbusMqttDevice(x) for x in data.get(KEY_DEVICES) or []]
-        self._name: str = data.get(KEY_APP) or ""
+        self._devices = [QbusMqttDevice(x) for x in data.get(DiscoveryKey.DEVICES) or []]
+        self._name: str = data.get(DiscoveryKey.APP) or ""
 
     def get_device_by_id(self, id: str) -> QbusMqttDevice | None:
         """Get the device by id."""
