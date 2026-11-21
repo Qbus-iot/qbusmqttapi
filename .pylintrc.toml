@@ -1,26 +1,28 @@
 # The contents of this file is based on https://github.com/home-assistant/core/blob/dev/pyproject.toml
 
-[MAIN]
+[tool.pylint.MAIN]
 # Specify the Python version
-py-version=3.12
+py-version = "3.12"
 
 # Use a conservative default here; 2 should speed up most setups and not hurt
 # any too bad. Override on command line as appropriate.
-jobs=2
+jobs = 2
 
-load-plugins=
-    pylint.extensions.code_style,
-    pylint.extensions.typing
+load-plugins = [
+    "pylint.extensions.code_style",
+    "pylint.extensions.typing",
+    "pylint_per_file_ignores",
+]
 
 persistent = false
 fail-on = [
     "I",
 ]
 
-[BASIC]
+[tool.pylint.BASIC]
 class-const-naming-style = "any"
 
-["MESSAGES CONTROL"]
+[tool.pylint."MESSAGES CONTROL"]
 # Reasons disabled:
 # format - handled by ruff
 # locally-disabled - it spams too much
@@ -290,29 +292,29 @@ per-file-ignores = [
     # redefined-outer-name: Tests reference fixtures in the test function
     # use-implicit-booleaness-not-comparison: Tests need to validate that a list
     # or a dict is returned
-    "/tests/:redefined-outer-name,use-implicit-booleaness-not-comparison",
+    "tests/**:redefined-outer-name,use-implicit-booleaness-not-comparison",
 ]
 
-[REPORTS]
+[tool.pylint.REPORTS]
 score = false
 
-[TYPECHECK]
+[tool.pylint.TYPECHECK]
 ignored-classes = [
     "_CountingAttr",  # for attrs
 ]
 mixin-class-rgx = ".*[Mm]ix[Ii]n"
 
-[FORMAT]
+[tool.pylint.FORMAT]
 expected-line-ending-format = "LF"
 
-[EXCEPTIONS]
+[tool.pylint.EXCEPTIONS]
 overgeneral-exceptions = [
     "builtins.BaseException",
     "builtins.Exception",
 ]
 
-[TYPING]
+[tool.pylint.TYPING]
 runtime-typing = false
 
-[CODE_STYLE]
+[tool.pylint.CODE_STYLE]
 max-line-length-suggestions = 72
