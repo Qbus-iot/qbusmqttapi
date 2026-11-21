@@ -2,6 +2,8 @@
 
 TOPIC_PREFIX = "cloudapp/QBUSMQTTGW"
 
+# Deprecated: use OutputKey (discovery.py) or StateKey (state.py) instead.
+# Kept for backwards compatibility and will be removed in a future version.
 KEY_OUTPUT_ACTION = "action"
 KEY_OUTPUT_ACTIONS = "actions"
 KEY_OUTPUT_ID = "id"
@@ -13,6 +15,8 @@ KEY_OUTPUT_REF_ID = "refId"
 KEY_OUTPUT_TYPE = "type"
 KEY_OUTPUT_VARIANT = "variant"
 
+# Deprecated: use the *StateProperty enums in state.py instead.
+# Kept for backwards compatibility and will be removed in a future version.
 KEY_PROPERTIES_AUTHKEY = "authKey"
 KEY_PROPERTIES_CO2 = "co2"
 KEY_PROPERTIES_CURRENT_TEMPERATURE = "currTemp"

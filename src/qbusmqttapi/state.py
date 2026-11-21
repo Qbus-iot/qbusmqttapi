@@ -3,22 +3,8 @@
 from enum import StrEnum
 from typing import Any
 
-from .const import (
-    KEY_OUTPUT_ACTION,
-    KEY_OUTPUT_ID,
-    KEY_OUTPUT_PROPERTIES,
-    KEY_OUTPUT_TYPE,
-    KEY_PROPERTIES_CO2,
-    KEY_PROPERTIES_CURRENT_TEMPERATURE,
-    KEY_PROPERTIES_REFRESH,
-    KEY_PROPERTIES_REGIME,
-    KEY_PROPERTIES_SET_TEMPERATURE,
-    KEY_PROPERTIES_SHUTTER_POSITION,
-    KEY_PROPERTIES_SLAT_POSITION,
-    KEY_PROPERTIES_STATE,
-    KEY_PROPERTIES_VALUE,
-)
-
+# Deprecated: use DeviceStateKey, DeviceStateProperty or GatewayStateKey instead.
+# Kept for backwards compatibility and will be removed in a future version.
 KEY_DEVICE_CONNECTABLE = "connectable"
 KEY_DEVICE_CONNECTED = "connected"
 KEY_DEVICE_ID = "id"
@@ -42,6 +28,87 @@ class StateAction(StrEnum):
 
     ACTIVATE = "activate"
     ACTIVE = "active"
+
+
+class StateKey(StrEnum):
+    """Top-level keys to read or write the state."""
+
+    ACTION = "action"
+    ID = "id"
+    PROPERTIES = "properties"
+    TYPE = "type"
+
+
+class GatewayStateKey(StrEnum):
+    """Top-level keys to read the gateway state."""
+
+    ID = "id"
+    ONLINE = "online"
+    REASON = "reason"
+
+
+class DeviceStateKey(StrEnum):
+    """Top-level keys to read the device state."""
+
+    ID = "id"
+    PROPERTIES = "properties"
+
+
+class DeviceStateProperty(StrEnum):
+    """Keys to read or write the device state properties."""
+
+    AUTHKEY = "authKey"
+    CONNECTABLE = "connectable"
+    CONNECTED = "connected"
+
+
+class OnOffStateProperty(StrEnum):
+    """Keys to read or write the on/off state."""
+
+    VALUE = "value"
+
+
+class AnalogStateProperty(StrEnum):
+    """Keys to read or write the analog state."""
+
+    VALUE = "value"
+
+
+class ShutterStateProperty(StrEnum):
+    """Keys to read or write the shutter state."""
+
+    SHUTTER_POSITION = "shutterPosition"
+    SLAT_POSITION = "slatPosition"
+    STATE = "state"
+
+
+class ThermoStateProperty(StrEnum):
+    """Keys to read or write the thermo state."""
+
+    CURRENT_REGIME = "currRegime"
+    CURRENT_TEMPERATURE = "currTemp"
+    SET_TEMPERATURE = "setTemp"
+
+
+class VentilationStateProperty(StrEnum):
+    """Keys to read or write the ventilation state."""
+
+    CO2 = "co2"
+    CURRENT_REGIME = "currRegime"
+    REFRESH = "refresh"
+
+
+class HumidityStateProperty(StrEnum):
+    """Keys to read or write the humidity state."""
+
+    CURRENT_REGIME = "currRegime"
+    VALUE = "value"
+
+
+class StepperStateProperty(StrEnum):
+    """Keys to read or write the stepper state."""
+
+    VALUE = "value"
 
 
 class GaugeStateProperty(StrEnum):
@@ -90,9 +157,9 @@ class QbusMqttGatewayState:
 
     def __init__(self, data: dict) -> None:
         """Initialize based on a json loaded dictionary."""
-        self.id: str | None = data.get(KEY_GATEWAY_ID)
-        self.online: bool | None = data.get(KEY_GATEWAY_ONLINE)
-        self.reason: str | None = data.get(KEY_GATEWAY_REASON)
+        self.id: str | None = data.get(GatewayStateKey.ID)
+        self.online: bool | None = data.get(GatewayStateKey.ONLINE)
+        self.reason: str | None = data.get(GatewayStateKey.REASON)
 
 
 class QbusMqttDeviceStateProperties:
@@ -100,8 +167,8 @@ class QbusMqttDeviceStateProperties:
 
     def __init__(self, data: dict) -> None:
         """Initialize based on a json loaded dictionary."""
-        self.connectable: bool | None = data.get(KEY_DEVICE_CONNECTABLE)
-        self.connected: bool | None = data.get(KEY_DEVICE_CONNECTED)
+        self.connectable: bool | None = data.get(DeviceStateProperty.CONNECTABLE)
+        self.connected: bool | None = data.get(DeviceStateProperty.CONNECTED)
 
 
 class QbusMqttDeviceState:
@@ -109,9 +176,9 @@ class QbusMqttDeviceState:
 
     def __init__(self, data: dict) -> None:
         """Initialize based on a json loaded dictionary."""
-        self.id: str | None = data.get(KEY_DEVICE_ID)
+        self.id: str | None = data.get(DeviceStateKey.ID)
 
-        properties = data.get(KEY_DEVICE_STATE_PROPERTIES)
+        properties = data.get(DeviceStateKey.PROPERTIES)
         self.properties: QbusMqttDeviceStateProperties | None = (
             QbusMqttDeviceStateProperties(properties) if properties is not None else None
         )
@@ -135,10 +202,10 @@ class QbusMqttState:
         self.properties: dict | None = None
 
         if data is not None:
-            self.id = data.get(KEY_OUTPUT_ID, "")
-            self.type = data.get(KEY_OUTPUT_TYPE, "")
-            self.action = data.get(KEY_OUTPUT_ACTION)
-            self.properties = data.get(KEY_OUTPUT_PROPERTIES)
+            self.id = data.get(StateKey.ID, "")
+            self.type = data.get(StateKey.TYPE, "")
+            self.action = data.get(StateKey.ACTION)
+            self.properties = data.get(StateKey.PROPERTIES)
 
         if id is not None:
             self.id = id
@@ -176,11 +243,11 @@ class QbusMqttOnOffState(QbusMqttState):
 
     def read_value(self) -> bool:
         """Read the value of the Qbus output."""
-        return self.read_property(KEY_PROPERTIES_VALUE, False)
+        return self.read_property(OnOffStateProperty.VALUE, False)
 
     def write_value(self, on: bool) -> None:
         """Set the Qbus output on or off."""
-        self.write_property(KEY_PROPERTIES_VALUE, on)
+        self.write_property(OnOffStateProperty.VALUE, on)
 
 
 class QbusMqttAnalogState(QbusMqttState):
@@ -198,11 +265,11 @@ class QbusMqttAnalogState(QbusMqttState):
 
     def read_percentage(self) -> float | None:
         """Read the value of the Qbus output."""
-        return self.read_property(KEY_PROPERTIES_VALUE, None)
+        return self.read_property(AnalogStateProperty.VALUE, None)
 
     def write_percentage(self, percentage: float) -> None:
         """Set the value of the Qbus output."""
-        self.write_property(KEY_PROPERTIES_VALUE, percentage)
+        self.write_property(AnalogStateProperty.VALUE, percentage)
 
     def write_on_off(self, on: bool) -> None:
         """Set the Qbus output on or off."""
@@ -224,27 +291,27 @@ class QbusMqttShutterState(QbusMqttState):
 
     def read_state(self) -> str | None:
         """Read the state of the Qbus output."""
-        return self.read_property(KEY_PROPERTIES_STATE, None)
+        return self.read_property(ShutterStateProperty.STATE, None)
 
     def write_state(self, state: str) -> None:
         """Set the state of the Qbus output."""
-        self.write_property(KEY_PROPERTIES_STATE, state)
+        self.write_property(ShutterStateProperty.STATE, state)
 
     def read_position(self) -> int | None:
         """Read the position of the Qbus output."""
-        return self.read_property(KEY_PROPERTIES_SHUTTER_POSITION, None)
+        return self.read_property(ShutterStateProperty.SHUTTER_POSITION, None)
 
     def write_position(self, percentage: int) -> None:
         """Set the position of the Qbus output."""
-        self.write_property(KEY_PROPERTIES_SHUTTER_POSITION, percentage)
+        self.write_property(ShutterStateProperty.SHUTTER_POSITION, percentage)
 
     def read_slat_position(self) -> int | None:
         """Read the slat position of the Qbus output."""
-        return self.read_property(KEY_PROPERTIES_SLAT_POSITION, None)
+        return self.read_property(ShutterStateProperty.SLAT_POSITION, None)
 
     def write_slat_position(self, percentage: int) -> None:
         """Set the slat position of the Qbus output."""
-        self.write_property(KEY_PROPERTIES_SLAT_POSITION, percentage)
+        self.write_property(ShutterStateProperty.SLAT_POSITION, percentage)
 
 
 class QbusMqttThermoState(QbusMqttState):
@@ -262,23 +329,23 @@ class QbusMqttThermoState(QbusMqttState):
 
     def read_current_temperature(self) -> float | None:
         """Read the current temperature of the Qbus output."""
-        return self.read_property(KEY_PROPERTIES_CURRENT_TEMPERATURE, None)
+        return self.read_property(ThermoStateProperty.CURRENT_TEMPERATURE, None)
 
     def read_set_temperature(self) -> float | None:
         """Read the set temperature of the Qbus output."""
-        return self.read_property(KEY_PROPERTIES_SET_TEMPERATURE, None)
+        return self.read_property(ThermoStateProperty.SET_TEMPERATURE, None)
 
     def write_set_temperature(self, temperature: float) -> None:
         """Set the set temperature of the Qbus output."""
-        self.write_property(KEY_PROPERTIES_SET_TEMPERATURE, temperature)
+        self.write_property(ThermoStateProperty.SET_TEMPERATURE, temperature)
 
     def read_regime(self) -> str | None:
         """Read the regime of the Qbus output."""
-        return self.read_property(KEY_PROPERTIES_REGIME, None)
+        return self.read_property(ThermoStateProperty.CURRENT_REGIME, None)
 
     def write_regime(self, regime: str) -> None:
         """Set the regime of the Qbus output."""
-        self.write_property(KEY_PROPERTIES_REGIME, regime)
+        self.write_property(ThermoStateProperty.CURRENT_REGIME, regime)
 
 
 class QbusMqttGaugeState(QbusMqttState):
@@ -314,19 +381,19 @@ class QbusMqttVentilationState(QbusMqttState):
 
     def read_co2(self) -> float:
         """Read the co2 of the Qbus output."""
-        return self.read_property(KEY_PROPERTIES_CO2, 0)
+        return self.read_property(VentilationStateProperty.CO2, 0)
 
     def read_refresh(self) -> int:
         """Read the co2 of the Qbus output."""
-        return self.read_property(KEY_PROPERTIES_REFRESH, 0)
+        return self.read_property(VentilationStateProperty.REFRESH, 0)
 
     def read_regime(self) -> str | None:
         """Read the regime of the Qbus output."""
-        return self.read_property(KEY_PROPERTIES_REGIME, None)
+        return self.read_property(VentilationStateProperty.CURRENT_REGIME, None)
 
     def write_regime(self, regime: str) -> None:
         """Set the regime of the Qbus output."""
-        self.write_property(KEY_PROPERTIES_REGIME, regime)
+        self.write_property(VentilationStateProperty.CURRENT_REGIME, regime)
 
 
 class QbusMqttHumidityState(QbusMqttState):
@@ -344,15 +411,15 @@ class QbusMqttHumidityState(QbusMqttState):
 
     def read_value(self) -> float:
         """Read the value of the Qbus output."""
-        return self.read_property(KEY_PROPERTIES_VALUE, 0)
+        return self.read_property(HumidityStateProperty.VALUE, 0)
 
     def read_regime(self) -> str | None:
         """Read the regime of the Qbus output."""
-        return self.read_property(KEY_PROPERTIES_REGIME, None)
+        return self.read_property(HumidityStateProperty.CURRENT_REGIME, None)
 
     def write_regime(self, regime: str) -> None:
         """Set the regime of the Qbus output."""
-        self.write_property(KEY_PROPERTIES_REGIME, regime)
+        self.write_property(HumidityStateProperty.CURRENT_REGIME, regime)
 
 
 class QbusMqttWeatherState(QbusMqttState):
@@ -420,11 +487,11 @@ class QbusMqttStepperState(QbusMqttState):
 
     def read_value(self) -> int | None:
         """Read the value of the Qbus output."""
-        return self.read_property(KEY_PROPERTIES_VALUE, None)
+        return self.read_property(StepperStateProperty.VALUE, None)
 
     def write_value(self, value: int) -> None:
         """Set the value of the Qbus output."""
-        self.write_property(KEY_PROPERTIES_VALUE, value)
+        self.write_property(StepperStateProperty.VALUE, value)
 
 
 class QbusMqttMultiColorState(QbusMqttState):
