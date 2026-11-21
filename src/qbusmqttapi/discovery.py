@@ -14,6 +14,7 @@ from .const import (
     KEY_OUTPUT_VARIANT,
 )
 
+KEY_APP = "app"
 KEY_DEVICES = "devices"
 
 KEY_DEVICE_FUNCTIONBLOCKS = "functionBlocks"
@@ -149,10 +150,8 @@ class QbusDiscovery:
 
     def __init__(self, data: dict) -> None:
         """Initialize based on a json loaded dictionary."""
-        if KEY_DEVICES in data:
-            self._devices = [QbusMqttDevice(x) for x in data[KEY_DEVICES]]
-
-        self._name: str = data["app"]
+        self._devices = [QbusMqttDevice(x) for x in data.get(KEY_DEVICES) or []]
+        self._name: str = data.get(KEY_APP) or ""
 
     def get_device_by_id(self, id: str) -> QbusMqttDevice | None:
         """Get the device by id."""
