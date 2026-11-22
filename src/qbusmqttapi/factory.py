@@ -7,14 +7,9 @@ from typing import Any, TypeVar
 
 from .const import TOPIC_PREFIX
 from .discovery import QbusDiscovery, QbusMqttDevice
-from .state import (
-    DeviceStateProperty,
-    QbusMqttDeviceState,
-    QbusMqttGatewayState,
-    QbusMqttState,
-    StateAction,
-    StateType,
-)
+from .state import QbusMqttState, StateAction, StateType
+from .state.device import DeviceStateProperty, QbusMqttDeviceState
+from .state.gateway import QbusMqttGatewayState
 
 _LOGGER = logging.getLogger(__name__)
 
